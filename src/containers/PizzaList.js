@@ -1,8 +1,21 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Pizza from "../components/Pizza";
+
 function PizzaList() {
+  const [pizzas, setPizzas] = useState([]);
+  const fetchPizzas = async () => {
+    const response = await fetch("http://localhost:3000/pizzas");
+    const pizzaData = await response.json();
+    console.log(pizzaData);
+    setPizzas(pizzaData);
+  };
+  useEffect(() => fetchPizzas(), []);
+
+  const pizzaTable = () => {
+    return pizzas.map((pizza) => <Pizza {...pizza} />);
+  };
   return (
-    <table className="table table-striped">
+    <table onClick={fetchPizzas} className="table table-striped">
       <thead>
         <tr>
           <th scope="col">Topping</th>
@@ -11,11 +24,7 @@ function PizzaList() {
           <th scope="col">Edit</th>
         </tr>
       </thead>
-      <tbody>
-        {
-          //render Pizza here
-        }
-      </tbody>
+      <tbody>{pizzaTable().length === 0 ? "loading..." : pizzaTable()}</tbody>
     </table>
   );
 }
