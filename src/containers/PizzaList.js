@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import Pizza from "../components/Pizza";
 
-function PizzaList() {
+function PizzaList({ setTopping, setSize, setIsVegetarian }) {
   const [pizzas, setPizzas] = useState([]);
   const fetchPizzas = async () => {
     const response = await fetch("http://localhost:3000/pizzas");
@@ -12,7 +12,14 @@ function PizzaList() {
   useEffect(() => fetchPizzas(), []);
 
   const pizzaTable = () => {
-    return pizzas.map((pizza) => <Pizza {...pizza} />);
+    return pizzas.map((pizza) => (
+      <Pizza
+        {...pizza}
+        setTopping={setTopping}
+        setSize={setSize}
+        setIsVegetarian={setIsVegetarian}
+      />
+    ));
   };
   return (
     <table onClick={fetchPizzas} className="table table-striped">
